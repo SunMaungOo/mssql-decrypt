@@ -61,7 +61,7 @@ class MSSQLDecrypt:
 
     def decrypt(self,\
                 cipher_b64:str,\
-                authenticator:bytes=None,\
+                authenticator:Optional[bytes]=None,\
                 is_default_key_algorithm:bool=True)->Optional[DecryptedMessage]:
         """
         cipher_b64 = base64 encoded cipher text
@@ -116,7 +116,7 @@ class MSSQLDecrypt:
 
                 is_tamper_check = True
 
-                is_tamper = hashlib.sha1(envelope_message.plaintext+authenticator).digest() == envelope_message.integrity
+                is_tamper = not(hashlib.sha1(envelope_message.plaintext+authenticator).digest() == envelope_message.integrity)
 
             return DecryptedMessage(
                 message=self.__decode_text(plaintext=envelope_message.plaintext),\
